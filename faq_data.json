@@ -1,0 +1,30 @@
+[
+    {
+        "question": "hi",
+        "answer": "Hello! Welcome to Smart FAQ Chatbot."
+    },
+    {
+        "question": "hello",
+        "answer": "Hi! How can I help you today?"
+    },
+    {
+        "question": "what is your name",
+        "answer": "I am Smart FAQ Chatbot."
+    },
+    {
+        "question": "who developed you",
+        "answer": "I was developed using Python Flask, HTML, CSS, JavaScript and SQLite."
+    },
+    {
+        "question": "what is python",
+        "answer": "Python is a high-level programming language used for web development, AI, automation and more."
+    },
+    {
+        "question": "what is flask",
+        "answer": "Flask is a lightweight Python web framework."
+    },
+    {
+        "question": "bye",
+        "answer": "Goodbye! Have a nice day."
+    }
+]

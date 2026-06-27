@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Smart FAQ Chatbot</title>
+
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+</head>
+
+<body>
+
+<div class="background"></div>
+
+<div class="chat-container">
+
+    <!-- LEFT SIDE -->
+    <div class="history-panel">
+        <h3>📜 Chat History</h3>
+
+        {% if history %}
+            {% for chat in history %}
+                <div class="history-item">
+                    {{ chat.question }}
+                </div>
+            {% endfor %}
+        {% else %}
+            <div class="history-item">
+                No chat history
+            </div>
+        {% endif %}
+    </div>
+
+    <!-- RIGHT SIDE -->
+    <div class="chat-main">
+
+        <!-- HEADER -->
+        <div class="chat-header">
+
+            <div class="left">
+                <img src="{{ url_for('static', filename='chatbot1.jpeg') }}" class="bot-logo">
+
+                <div>
+                    <h2>Smart FAQ Chatbot</h2>
+                    <p>🟢 Online</p>
+                </div>
+            </div>
+
+            <a href="/logout">
+                <button class="logout-btn">
+                    <i class="fa-solid fa-right-from-bracket"></i> Logout
+                </button>
+            </a>
+
+            <button class="clear-btn" type="button" onclick="clearChat()">
+                🗑️ Clear Chat
+            </button>
+
+            <button class="clear-btn" type="button" onclick="clearHistory()">
+                🧹 Clear History
+            </button>
+
+        </div>
+
+        <!-- CHAT BOX -->
+        <div id="chat-box" class="chat-box">
+
+            <div class="message bot">
+                <div class="icon">🤖</div>
+                <div class="text">
+                    Hello 👋<br>
+                    Welcome to Smart FAQ Chatbot.<br>
+                    Ask me anything!
+                </div>
+            </div>
+
+        </div>
+
+        <!-- TYPING -->
+        <div class="typing" id="typing">
+            <span></span><span></span><span></span>
+        </div>
+
+        <!-- INPUT -->
+        <div class="input-area">
+
+            <input type="text" id="message" placeholder="Ask your question..." autocomplete="off">
+
+            <button onclick="sendMessage()">
+                <i class="fa-solid fa-paper-plane"></i>
+            </button>
+
+        </div>
+
+    </div>
+</div>
+
+<!-- JS -->
+<script>
+
+// TIME FUNCTION
+function getTime() {
+    let now = new Date();
+    return now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+}
+
+// SEND MESSAGE
+function sendMessage() {
+
+    let msg = document.getElementById("message").value;
+    if (msg.trim() === "") return;
+
+    let chatBox = document.getElementById("chat-box");
+    let time = getTime();
+
+    chatBox.innerHTML += `
+        <div class="message user">
+            <div class="icon">🧑</div>
+            <div class="text">
+                ${msg}
+                <div class="timestamp">${time}</div>
+            </div>
+        </div>
+    `;
+
+    document.getElementById("message").value = "";
+    document.getElementById("typing").style.display = "block";
+
+    fetch("/chat", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/x-www-form-urlencoded"
+        },
+        body: "message=" + encodeURIComponent(msg)
+    })
+    .then(res => res.text())
+    .then(data => {
+
+        document.getElementById("typing").style.display = "none";
+
+        let botTime = getTime();
+
+        chatBox.innerHTML += `
+            <div class="message bot">
+                <div class="icon">🤖</div>
+                <div class="text">
+                    ${data}
+                    <div class="timestamp">${botTime}</div>
+                </div>
+            </div>
+        `;
+
+        chatBox.scrollTop = chatBox.scrollHeight;
+    });
+}
+
+/* CLEAR CHAT */
+function clearChat() {
+    document.getElementById("chat-box").innerHTML = `
+        <div class="message bot">
+            <div class="icon">🤖</div>
+            <div class="text">
+                Hello 👋<br>
+                Welcome to Smart FAQ Chatbot.<br>
+                Ask me anything!
+            </div>
+        </div>
+    `;
+
+    document.getElementById("typing").style.display = "none";
+}
+
+/* CLEAR HISTORY */
+function clearHistory() {
+    document.querySelectorAll(".history-item").forEach(item => item.remove());
+}
+
+</script>
+
+</body>
+</html>

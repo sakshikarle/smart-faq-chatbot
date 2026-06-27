@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Smart FAQ Chatbot</title>
+
+    <style>
+
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+            font-family:Arial,sans-serif;
+        }
+
+        body{
+            height:100vh;
+            display:flex;
+            justify-content:center;
+            align-items:center;
+
+            background:url("/static/chatbot1.jpeg") no-repeat center center fixed;
+            background-size:cover;
+        }
+
+        .login-box{
+            width:380px;
+            padding:35px;
+            text-align:center;
+
+            background:rgba(255,255,255,0.15);
+            backdrop-filter:blur(15px);
+            -webkit-backdrop-filter:blur(15px);
+
+            border:1px solid rgba(255,255,255,.3);
+            border-radius:20px;
+
+            box-shadow:0 10px 35px rgba(0,0,0,.4);
+        }
+
+        .login-box img{
+            width:110px;
+            height:110px;
+            border-radius:50%;
+            border:3px solid white;
+            object-fit:cover;
+            margin-bottom:15px;
+        }
+
+        .login-box h2{
+            color:white;
+            margin-bottom:20px;
+        }
+
+        .login-box input{
+            width:100%;
+            padding:12px;
+            margin:10px 0;
+            border:none;
+            outline:none;
+            border-radius:8px;
+            background:rgba(255,255,255,.2);
+            color:white;
+        }
+
+        .login-box input::placeholder{
+            color:white;
+        }
+
+        .login-box button{
+            width:100%;
+            padding:12px;
+            margin-top:10px;
+            border:none;
+            border-radius:8px;
+            background:#2563eb;
+            color:white;
+            font-size:16px;
+            cursor:pointer;
+        }
+
+        .login-box button:hover{
+            background:#1d4ed8;
+        }
+
+        .login-box p{
+            margin-top:18px;
+            color:white;
+        }
+
+        .login-box a{
+            color:#ffd54f;
+            text-decoration:none;
+            font-weight:bold;
+        }
+
+        .login-box a:hover{
+            text-decoration:underline;
+        }
+
+    </style>
+</head>
+<body>
+
+<div class="login-box">
+
+    <img src="{{ url_for('static', filename='chatbot1.jpeg') }}" alt="Chatbot">
+
+    <h2>Smart FAQ Chatbot</h2>
+
+    <form action="/login" method="POST">
+
+        <input
+            type="text"
+            name="username"
+            placeholder="Username"
+            required
+        >
+
+        <input
+            type="password"
+            name="password"
+            placeholder="Password"
+            required
+        >
+
+        <button type="submit">Login</button>
+
+    </form>
+
+    <p>
+        Don't have an account?
+        <a href="/register">Register</a>
+    </p>
+
+</div>
+
+</body>
+</html>

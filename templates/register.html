@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - Smart FAQ Chatbot</title>
+
+    <style>
+
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+            font-family:Arial,sans-serif;
+        }
+
+        body{
+            height:100vh;
+            display:flex;
+            justify-content:center;
+            align-items:center;
+
+            background:url("/static/chatbot1.jpeg") no-repeat center center fixed;
+            background-size:cover;
+        }
+
+        .register-box{
+            width:380px;
+            padding:35px;
+            text-align:center;
+
+            background:rgba(255,255,255,0.15);
+            backdrop-filter:blur(15px);
+            -webkit-backdrop-filter:blur(15px);
+
+            border:1px solid rgba(255,255,255,.3);
+            border-radius:20px;
+
+            box-shadow:0 10px 35px rgba(0,0,0,.4);
+        }
+
+        .register-box img{
+            width:110px;
+            height:110px;
+            border-radius:50%;
+            object-fit:cover;
+            border:3px solid white;
+            margin-bottom:15px;
+        }
+
+        .register-box h2{
+            color:white;
+            margin-bottom:20px;
+        }
+
+        .register-box input{
+            width:100%;
+            padding:12px;
+            margin:10px 0;
+            border:none;
+            outline:none;
+            border-radius:8px;
+            background:rgba(255,255,255,.2);
+            color:white;
+        }
+
+        .register-box input::placeholder{
+            color:white;
+        }
+
+        .register-box button{
+            width:100%;
+            padding:12px;
+            margin-top:10px;
+            border:none;
+            border-radius:8px;
+            background:#2563eb;
+            color:white;
+            font-size:16px;
+            cursor:pointer;
+        }
+
+        .register-box button:hover{
+            background:#1d4ed8;
+        }
+
+        .register-box p{
+            margin-top:18px;
+            color:white;
+        }
+
+        .register-box a{
+            color:#ffd54f;
+            text-decoration:none;
+            font-weight:bold;
+        }
+
+        .register-box a:hover{
+            text-decoration:underline;
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<div class="register-box">
+
+    <img src="{{ url_for('static', filename='chatbot1.jpeg') }}" alt="Chatbot">
+
+    <h2>Create Account</h2>
+
+    <form action="/register" method="POST">
+
+        <input
+            type="text"
+            name="username"
+            placeholder="Username"
+            required
+        >
+
+        <input
+            type="password"
+            name="password"
+            placeholder="Password"
+            required
+        >
+
+        <button type="submit">Register</button>
+
+    </form>
+
+    <p>
+        Already have an account?
+        <a href="/login">Login</a>
+    </p>
+
+</div>
+
+</body>
+</html>
