@@ -1,14 +1,18 @@
 from flask import Flask, render_template, request, redirect, url_for, session
 import sqlite3
 import json
+import os
 from ai import ask_ai
 
 app = Flask(__name__)
 app.secret_key = "secret123"
 
 # ---------------- DATABASE ----------------
+BASE_DIR = os.path.abspath(os.path.dirname(__file__))
+DB_PATH = os.path.join(BASE_DIR, "chatbot.db")
+
 def get_db():
-    conn = sqlite3.connect("chatbot.db")
+    conn = sqlite3.connect(DB_PATH)
     conn.row_factory = sqlite3.Row
     return conn
 
@@ -38,7 +42,6 @@ def init_db():
     conn.commit()
     conn.close()
 
-# Create tables automatically
 init_db()
 
 
@@ -48,6 +51,7 @@ def home():
     if "user" not in session:
         return redirect(url_for("login"))
     return redirect(url_for("chat_page"))
+
 
 # ---------------- LOGIN ----------------
 @app.route("/login", methods=["GET", "POST"])
@@ -65,6 +69,9 @@ def login():
         )
 
         user = cur.fetchone()
+
+        print("LOGIN USER:", user)
+
         conn.close()
 
         if user:
@@ -74,6 +81,7 @@ def login():
             return render_template("login.html", error="Invalid login")
 
     return render_template("login.html")
+
 
 # ---------------- REGISTER ----------------
 @app.route("/register", methods=["GET", "POST"])
@@ -90,8 +98,14 @@ def register():
                 "INSERT INTO users(username, password) VALUES(?, ?)",
                 (username, password)
             )
+
             conn.commit()
+
+            cur.execute("SELECT * FROM users")
+            print("ALL USERS:", cur.fetchall())
+
             conn.close()
+
             return redirect(url_for("login"))
 
         except sqlite3.IntegrityError:
@@ -99,6 +113,8 @@ def register():
             return "Username already exists!"
 
     return render_template("register.html")
+
+
 
 # ---------------- CHAT PAGE ----------------
 @app.route("/chat")
@@ -121,9 +137,13 @@ def chat_page():
 
     return render_template("index.html", history=history)
 
+
 # ---------------- CHAT API ----------------
 @app.route("/chat", methods=["POST"])
 def chat_api():
+    if "user" not in session:
+        return "Unauthorized", 401
+
     user_msg = request.form["message"].lower()
 
     with open("faq_data.json", "r", encoding="utf-8") as f:
@@ -162,23 +182,25 @@ def chat_api():
 
     return ai_answer
 
+
 # ---------------- ADMIN PANEL ----------------
 @app.route("/admin")
 def admin():
     if "user" not in session:
         return redirect(url_for("login"))
 
-    # simple admin check (optional)
     if session["user"] != "admin":
         return "Access Denied"
 
     return render_template("admin.html")
+
 
 # ---------------- LOGOUT ----------------
 @app.route("/logout")
 def logout():
     session.pop("user", None)
     return redirect(url_for("login"))
+
 
 # ---------------- RUN ----------------
 if __name__ == "__main__":
