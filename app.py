@@ -12,6 +12,36 @@ def get_db():
     conn.row_factory = sqlite3.Row
     return conn
 
+
+# ---------------- CREATE TABLES ----------------
+def init_db():
+    conn = get_db()
+    cur = conn.cursor()
+
+    cur.execute("""
+    CREATE TABLE IF NOT EXISTS users (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        username TEXT UNIQUE,
+        password TEXT
+    )
+    """)
+
+    cur.execute("""
+    CREATE TABLE IF NOT EXISTS chat_history (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        username TEXT,
+        question TEXT,
+        answer TEXT
+    )
+    """)
+
+    conn.commit()
+    conn.close()
+
+# Create tables automatically
+init_db()
+
+
 # ---------------- HOME ----------------
 @app.route("/")
 def home():
